@@ -1,0 +1,70 @@
+so, this package gets compiled into a binary which normalises passwd and
+group files, traditionally arrayed in /etc. It takes a path to the
+target file as the first argument. It then copies the original file into
+a backup in /tmp:
+
+~/SourceCode/lisp  ᐅ ./godot /etc/passwd
+ARGV :: ./godot /etc/passwd
+
+OPath: /etc/passwd
+
+Sizes of original and sorted files match,
+
+copying sorted file into place... [Done]
+
+#+BEGIN_SRC shell
+
+/tmp  ᐅ ls -al pass*
+-rw-r--r-- 1 root root 2171 Nov 21 15:37 passwd.presort.3594055045
+-rw-r--r-- 1 root root 2171 Nov 21 15:37 passwd.sorted
+
+to whit:
+
+/tmp  ᐅ diff -u ./passwd.presort.3594055045 ./passwd.sorted
+--- ./passwd.presort.3594055045 2013-11-21 15:37:25.956730587 -0500
++++ ./passwd.sorted     2013-11-21 15:37:25.952730587 -0500
+@@ -15,7 +15,6 @@
+ list:x:38:38:Mailing List Manager:/var/list:/bin/sh
+ irc:x:39:39:ircd:/var/run/ircd:/bin/sh
+ gnats:x:41:41:Gnats Bug-Reporting System (admin):/var/lib/gnats:/bin/sh
+-nobody:x:65534:65534:nobody:/nonexistent:/bin/sh
+ libuuid:x:100:101::/var/lib/libuuid:/bin/sh
+ syslog:x:101:103::/home/syslog:/bin/false
+ messagebus:x:102:105::/var/run/dbus:/bin/false
+@@ -32,11 +31,12 @@
+ pulse:x:113:121:PulseAudio daemon,,,:/var/run/pulse:/bin/false
+ hplip:x:114:7:HPLIP system user,,,:/var/run/hplip:/bin/false
+ saned:x:115:123::/home/saned:/bin/false
+-fade:x:1000:1000:Brian O'Reilly,,,:/home/fade:/usr/bin/zsh
+ nm-openconnect:x:116:127:NetworkManager OpenConnect plugin,,,:/var/lib/NetworkManager:/bin/false
+ kdm:x:117:65534::/home/kdm:/bin/false
+ liquidsoap:x:118:128::/usr/share/liquidsoap:/bin/false
+ couchdb:x:119:129:CouchDB Administrator,,,:/var/lib/couchdb:/bin/bash
+ postgres:x:120:130:PostgreSQL administrator,,,:/var/lib/postgresql:/bin/bash
++fade:x:1000:1000:Brian O'Reilly,,,:/home/fade:/usr/bin/zsh
+ kiosk:x:1001:1001:kiosk,,,:/home/kiosk:/bin/bash
+ satan:x:6666:6666:Lucifer Hamerssen,,,:/home/satan:/bin/bash
++nobody:x:65534:65534:nobody:/nonexistent:/bin/sh
+
+#+END_SRC
+
+The same holds true for the group file.
+
+
+to build this system, you use a utility called 'buildapp', like so.
+Obviously you will have to adjust the paths to match your own system..
+
+#+BEGIN_SRC shell
+
+buildapp --manifest-file ./quicklisp-manifest.txt --load-path ~/SourceCode/lisp/audit-utils --load-system audit-utils --output godot --entry audit-utils:muppet
+
+#+END_SRC
+
+you will first, however, need to generate the quicklisp manifest file
+(install quicklisp first: http://www.quicklisp.org/) like this:
+
+#+BEGIN_SRC shell
+
+sbcl --no-userinit --no-sysinit --non-interactive --load ~/quicklisp/setup.lisp --eval '(ql:quickload "drakma")' --eval '(ql:write-asdf-manifest-file "quicklisp-manifest.txt")'
+
+#+END_SRC
