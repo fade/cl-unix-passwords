@@ -51,20 +51,31 @@ to whit:
 The same holds true for the group file.
 
 
-to build this system, you use a utility called 'buildapp', like so.
-Obviously you will have to adjust the paths to match your own system..
+The Makefile in this project will generate the binary. The only
+prerequisite is that you have a common lisp compiler/runtime installed
+on the system where you are executing the build.
 
 #+BEGIN_SRC shell
 
-buildapp --manifest-file ./quicklisp-manifest.txt --load-path ~/SourceCode/lisp/audit-utils --load-system audit-utils --output godot --entry audit-utils:muppet
+$ sudo aptitude install sbcl
+$ cd ~/path/to/godot
+$ make
+
+[ snip much output ]
+
+┌[fade☮dakota]-(~/SourceCode/lisp/godot)-[git://master ✗]-
+└> ls -l
+total 70084
+-rwxr-xr-x 1 fade fade 56721456 Apr 13 13:29 buildapp
+-rwxr-xr-x 1 fade fade 14843952 Apr 13 13:29 godot
+-rw-r--r-- 1 fade fade      459 Apr 13 13:05 godot.asd
+-rw-r--r-- 1 fade fade     7787 Apr 13 13:17 godot.lisp
+-rw-r--r-- 1 fade fade      827 Apr 13 13:23 Makefile
+-rw-r--r-- 1 fade fade      223 Apr 13 13:15 package.lisp
+-rw-r--r-- 1 fade fade   282897 Apr 13 13:29 quicklisp-manifest.txt
+-rw-r--r-- 1 fade fade     2727 Apr 13 13:27 README.org
+-rw-r--r-- 1 fade fade       42 Apr 13 12:56 slime.lisp
 
 #+END_SRC
 
-you will first, however, need to generate the quicklisp manifest file
-(install quicklisp first: http://www.quicklisp.org/) like this:
-
-#+BEGIN_SRC shell
-
-sbcl --no-userinit --no-sysinit --non-interactive --load ~/quicklisp/setup.lisp --eval '(ql:quickload "drakma")' --eval '(ql:write-asdf-manifest-file "quicklisp-manifest.txt")'
-
-#+END_SRC
+C'est fini.
