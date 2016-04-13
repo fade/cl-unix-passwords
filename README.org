@@ -67,7 +67,7 @@ $ make
 └> ls -l
 total 70084
 -rwxr-xr-x 1 fade fade 56721456 Apr 13 13:29 buildapp
--rwxr-xr-x 1 fade fade 14843952 Apr 13 13:29 godot
+-rwxr-xr-x 1 fade fade 14843952 Apr 13 13:29 godot *<-- BINARY*
 -rw-r--r-- 1 fade fade      459 Apr 13 13:05 godot.asd
 -rw-r--r-- 1 fade fade     7787 Apr 13 13:17 godot.lisp
 -rw-r--r-- 1 fade fade      827 Apr 13 13:23 Makefile
