@@ -76,7 +76,7 @@
   (output-sorted-pwfile :infile infile :outfile outfile))
 
 (defun f-length (file)
-  ;; just give me the file length of a file without having to do the
+  ;; just give me the length of a file without having to do the
   ;; w-o-f rigmarole.
   (with-open-file (s file)
     (file-length s)))
