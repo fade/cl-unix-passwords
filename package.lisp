@@ -1,6 +1,6 @@
 ;;;; package.lisp
 
-(defpackage #:godot
+(defpackage #:clup
   (:use #:cl
         #:cl-ppcre
         #:split-sequence

@@ -1,6 +1,6 @@
 ;;;; audit-utils.lisp
 
-(in-package #:godot)
+(in-package #:clup)
 
 ;;; "audit-utils" goes here. Hacks and glory await!
 
@@ -147,7 +147,7 @@ copying ~a file into ~a ... " inf (format nil "/tmp/~A.presort.~A" (file-namestr
   (let ((possible-path (make-pathname :defaults (second argv))))
     (format t "~&OPath: ~A~%~%" possible-path)
     (if possible-path
-        (godot:do-sort-pass :inf possible-path))))
+        (clup:do-sort-pass :inf possible-path))))
 
 ;; ;;; sort the password file
 
@@ -190,7 +190,7 @@ copying ~a file into ~a ... " inf (format nil "/tmp/~A.presort.~A" (file-namestr
   (let ((possible-path (make-pathname :defaults (second argv))))
     (format t "~&OPath: ~A~%~%" possible-path)
     (if possible-path
-        (godot:do-sort-pass :inf possible-path))))
+        (clup:do-sort-pass :inf possible-path))))
 
 (defun disable-debugger ()
   (labels

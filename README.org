@@ -3,8 +3,8 @@ group files, traditionally arrayed in /etc. It takes a path to the
 target file as the first argument. It then copies the original file into
 a backup in /tmp:
 
-~/SourceCode/lisp  ᐅ ./godot /etc/passwd
-ARGV :: ./godot /etc/passwd
+~/SourceCode/lisp  ᐅ ./clup /etc/passwd
+ARGV :: ./clup /etc/passwd
 
 OPath: /etc/passwd
 
@@ -58,18 +58,18 @@ on the system where you are executing the build.
 #+BEGIN_SRC shell
 
 $ sudo aptitude install sbcl
-$ cd ~/path/to/godot
+$ cd ~/path/to/clup
 $ make
 
 [ snip much output ]
 
-┌[fade☮dakota]-(~/SourceCode/lisp/godot)-[git://master ✗]-
+┌[fade☮dakota]-(~/SourceCode/lisp/clup)-[git://master ✗]-
 └> ls -l
 total 70084
 -rwxr-xr-x 1 fade fade 56721456 Apr 13 13:29 buildapp
--rwxr-xr-x 1 fade fade 14843952 Apr 13 13:29 godot *<-- BINARY*
--rw-r--r-- 1 fade fade      459 Apr 13 13:05 godot.asd
--rw-r--r-- 1 fade fade     7787 Apr 13 13:17 godot.lisp
+-rwxr-xr-x 1 fade fade 14843952 Apr 13 13:29 clup *<-- BINARY*
+-rw-r--r-- 1 fade fade      459 Apr 13 13:05 clup.asd
+-rw-r--r-- 1 fade fade     7787 Apr 13 13:17 clup.lisp
 -rw-r--r-- 1 fade fade      827 Apr 13 13:23 Makefile
 -rw-r--r-- 1 fade fade      223 Apr 13 13:15 package.lisp
 -rw-r--r-- 1 fade fade   282897 Apr 13 13:29 quicklisp-manifest.txt

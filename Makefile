@@ -1,6 +1,6 @@
 ROOT_DIR:=$(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
-PACKAGE=godot
-OUT=godot
+PACKAGE=clup
+OUT=clup
 ENTRY=-main
 
 $(OUT): buildapp *.lisp quicklisp-manifest.txt

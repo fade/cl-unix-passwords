@@ -1,6 +1,6 @@
-;;;; godot.asd
+;;;; clup.asd
 
-(asdf:defsystem #:godot
+(asdf:defsystem #:clup
   :description "Sort password and group files by numeric UIDs."
   :author "Brian O'Reilly <boreilly@kobo.com>"
   :license "Modified BSD License"
@@ -14,4 +14,4 @@
                )
   :pathname "./"
   :components ((:file "package")
-               (:file "godot")))
+               (:file "clup")))
