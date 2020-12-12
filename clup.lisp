@@ -8,7 +8,7 @@
 ;; we're concerned about in this use, so there's no need to define
 ;; separate functions to handle each record type.
 
-
+(declaim (optimize (speed 0) (debug 3) (safety 3)))
 
 (defun quit (&optional code)
   "Taken from the cliki"
