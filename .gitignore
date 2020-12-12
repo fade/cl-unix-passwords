@@ -2,3 +2,5 @@ buildapp
 godot
 quicklisp-manifest.txt
 clup
+/pwfile_sort
+/tmp/
