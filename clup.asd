@@ -2,7 +2,7 @@
 
 (asdf:defsystem #:clup
   :description "Sort password and group files by numeric UIDs."
-  :author "Brian O'Reilly <boreilly@kobo.com>"
+  :author "Brian O'Reilly <fade@deepsky.com>"
   :license "Modified BSD License"
   :serial t
   :depends-on (:CL-FAD
