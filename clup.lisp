@@ -137,7 +137,18 @@ copying ~a file into ~a ... " inf (format nil "/tmp/~A.presort.~A" (file-namestr
          (flag :short-name "h" :long-name "help"
                :description "Print this help and exit.")
          (flag :short-name "v" :long-name "version"
-               :description "Print version number and exit")))
+               :description "Print version number and exit"))
+  ;; (group (:HEADER "Sort the password file by UID")
+  ;;        (path :short-name "p" :long-name "password"
+  ;;              :description "run against the system password file: /etc/passwd"
+  ;;              :argument-name "PASSWORD-FILE"
+  ;;              :default-value (lambda () "/etc/passwd")))
+  ;; (group (:HEADER "Sort the group file by GID")
+  ;;        (path :short-name "g" :long-name "group"
+  ;;              :description "run against the system group file: /etc/group"
+  ;;              :argument-name "GROUP-FILE"
+  ;;              :default-value (lambda () "/etc/passwd")))
+  )
 
 (defun muppet (argv)
   "Entry point for passwd auditing tool."
