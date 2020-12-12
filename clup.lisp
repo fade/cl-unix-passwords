@@ -84,8 +84,7 @@
 (defun do-sort-group (&key (inf "/etc/group"))
   "enter rat's nest of side effects... "
   (if inf
-      (output-sorted-gfile :infile inf) ; ->  /tmp/pwdfile.sorted
-      (output-sorted-gfile)) ;; <--  this will never happen.
+      (output-sorted-gfile :infile inf))
   (let* ((ouf (format nil "/tmp/~A.sorted" (file-namestring inf)))
          (original-file-length (f-length inf))
          (new-file-length (f-length ouf)))
@@ -108,9 +107,8 @@ copying sorted file into place. Backing up original ~A into ~A.. " inf backup)
 
 (defun do-sort-pass (&key (inf "/etc/passwd"))
   "enter rat's nest of side effects... "
-  (if inf
-      (output-sorted-pwfile :infile inf);->  /tmp/pwdfile.sorted
-      (output-sorted-pwfile)) ;;<--  this will never happen.
+  (when inf
+    (output-sorted-pwfile :infile inf))
   (let* ((ouf (format nil "/tmp/~A.sorted" (file-namestring inf)))
          (original-file-length (f-length inf))
          (new-file-length (f-length ouf)))
