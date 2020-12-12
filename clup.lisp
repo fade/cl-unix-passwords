@@ -43,8 +43,15 @@
 (defun read-pfile (&key (pfile "/etc/passwd"))
   "read the password file and return a list of strings for each line
    in the file."
-  (let ((plist (split-sequence #\newline (rutils:read-file pfile))))
-    plist))
+  (let* ((plist (split-sequence #\newline (rutils:read-file pfile)))
+         (blanks (length (loop for item in plist
+                               if (string= item "")
+                                 collect item)))
+         (plist-noblanks (loop for item in plist
+                               unless (string= item "")
+                                 collect item))) 
+    (setf *empty-lines* blanks) ;; number of newlines as value in bytes.
+    (values plist-noblanks blanks)))
 
 (defun read-gfile (&key (gfile "/etc/group"))
   "read the group file and return a list of strings for each line
@@ -70,14 +77,16 @@
 (defun reassemble-chopped-pwline (chopped-line)
   (rutil:strjoin #\: chopped-line))
 
-(defun output-sorted-pwfile (&key (infile "/etc/passwd") (outfile (format nil "/tmp/~A.sorted" (file-namestring infile))))
+(defun output-sorted-pwfile (&key (infile "/etc/passwd")
+                               (outfile (format nil "/tmp/~A.sorted" (file-namestring infile))))
   (with-open-file (s outfile :direction :output :if-exists :supersede)
     (loop for mug in
                   (sorted-pw-lines
                    (chop-pwf-line (read-pfile :pfile infile)))
           do (format s "~A~&" (reassemble-chopped-pwline mug)))))
 
-(defun output-sorted-gfile (&key (infile "/etc/group") (outfile (format nil "/tmp/~A.sorted" (file-namestring infile))))
+(defun output-sorted-gfile (&key (infile "/etc/group")
+                              (outfile (format nil "/tmp/~A.sorted" (file-namestring infile))))
   (output-sorted-pwfile :infile infile :outfile outfile))
 
 (defun f-length (file)
@@ -93,7 +102,8 @@
   (let* ((ouf (format nil "/tmp/~A.sorted" (file-namestring inf)))
          (original-file-length (f-length inf))
          (new-file-length (f-length ouf)))
-    (if (= original-file-length new-file-length)
+    (if (or (= original-file-length new-file-length)
+            *empty-lines*)
         (handler-case
             (let* ((backup (format nil "/tmp/~A.presort.~A" (file-namestring inf) (get-universal-time))))
               (format t "Sizes of original and sorted files match,~%
@@ -114,6 +124,7 @@ copying sorted file into place. Backing up original ~A into ~A.. " inf backup)
   "enter rat's nest of side effects... "
   (when inf
     (output-sorted-pwfile :infile inf))
+  (assert (uiop:file-exists-p inf))
   (let* ((ouf (format nil "/tmp/~A.sorted" (file-namestring inf)))
          (original-file-length (f-length inf))
          (new-file-length (f-length ouf)))
