@@ -1,6 +1,6 @@
 ROOT_DIR:=$(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 PACKAGE=clup
-OUT=clup
+OUT=pwfile_sort
 ENTRY=-main
 
 $(OUT): buildapp *.lisp quicklisp-manifest.txt
