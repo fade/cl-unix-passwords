@@ -10,8 +10,7 @@
                :RUTILS
                :ALEXANDRIA
                :SPLIT-SEQUENCE
-               :COM.DVLSOFT.CLON
-               )
+               :COM.DVLSOFT.CLON)
   :pathname "./"
   :components ((:file "package")
                (:file "clup")))
