@@ -35,11 +35,15 @@
 
 
 
+;; if we remove the empty subseqs here, we clean the file quite
+;; nicely, but we end up creating a file whose size does not match the
+;; size of the input, and we fail our sanity test on a file containing
+;; blank lines.
+;; :remove-empty-subseqs t
 (defun read-pfile (&key (pfile "/etc/passwd"))
   "read the password file and return a list of strings for each line
    in the file."
-  (let ((plist (split-sequence #\newline (rutils:read-file pfile)
-                               :remove-empty-subseqs t)))
+  (let ((plist (split-sequence #\newline (rutils:read-file pfile))))
     plist))
 
 (defun read-gfile (&key (gfile "/etc/group"))
