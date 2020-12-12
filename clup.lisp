@@ -55,9 +55,10 @@
   "chop a password/group file line into a list of colon delimited fields."
   (let* ((pieces-list (loop for line in passwd-lines
                             collect (split-sequence #\: line)))
+         ;; collected parts look like this => '(65534 ("nogroup" "x" "65534" ""))
          (ranked-list (loop for pl in pieces-list
                             collect (list (parse-integer (third pl))
-                                          pl))))
+                                          pl)))) 
     (sort ranked-list #'< :key #'car)))
 
 ;; forex: (sorted-pw-lines (chop-pwf-line (read-pfile))) -> list of
