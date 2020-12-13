@@ -1,5 +1,5 @@
 This package gets compiled into a binary which normalises passwd and
-group files, traditionally arrayed in /etc on posixish systems. It
+group files, traditionally arrayed in /etc on POSIXish systems. It
 takes a path to the target file as the first argument. It then copies
 the original file into a backup in /tmp:
 
