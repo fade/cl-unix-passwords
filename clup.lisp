@@ -153,7 +153,7 @@
                 ;;; if the file sizes don't match in length, but we have found empty lines:
                 ((and (/= original-file-length new-file-length) *empty-lines*)
                  (format t "Sizes of original and sorted files do not match,~%
-The file contained blank lines. copying cleaned and sorted ~a file into ~a ... ~%"
+The file contained blank lines. copying cleaned and sorted ~a file into ~a ... "
                          inf (format nil "/tmp/~A.presort.~A" (file-namestring inf) (get-universal-time)))
                  (cl-fad:copy-file
                   inf
@@ -163,7 +163,7 @@ The file contained blank lines. copying cleaned and sorted ~a file into ~a ... ~
                 ;;; if the file sizes match, just do it 
                 ((= original-file-length new-file-length)
                  (format t "Sizes of original and sorted files match,~%
-copying cleaned ~A file into ~A ... ~%"
+copying cleaned ~A file into ~A ... "
                          inf (format nil "/tmp/~A.presort.~A" (file-namestring inf) (get-universal-time)))
                  (cl-fad:copy-file
                   inf
