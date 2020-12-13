@@ -1,10 +1,10 @@
-so, this package gets compiled into a binary which normalises passwd and
-group files, traditionally arrayed in /etc. It takes a path to the
-target file as the first argument. It then copies the original file into
-a backup in /tmp:
+This package gets compiled into a binary which normalises passwd and
+group files, traditionally arrayed in /etc on posixish systems. It
+takes a path to the target file as the first argument. It then copies
+the original file into a backup in /tmp:
 
-~/SourceCode/lisp  ᐅ ./clup /etc/passwd
-ARGV :: ./clup /etc/passwd
+~/SourceCode/lisp  ᐅ ./pwfile_sort /etc/passwd
+ARGV :: ./pwfile_sort /etc/passwd
 
 OPath: /etc/passwd
 
@@ -67,7 +67,7 @@ $ make
 └> ls -l
 total 70084
 -rwxr-xr-x 1 fade fade 56721456 Apr 13 13:29 buildapp
--rwxr-xr-x 1 fade fade 14843952 Apr 13 13:29 clup *<-- BINARY*
+-rwxr-xr-x 1 fade fade 14843952 Apr 13 13:29 pwfile_sort *<-- BINARY*
 -rw-r--r-- 1 fade fade      459 Apr 13 13:05 clup.asd
 -rw-r--r-- 1 fade fade     7787 Apr 13 13:17 clup.lisp
 -rw-r--r-- 1 fade fade      827 Apr 13 13:23 Makefile
