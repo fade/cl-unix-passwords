@@ -162,8 +162,7 @@ The file contained blank lines. copying cleaned and sorted ~a file into ~a ... "
                  (format t "[Done]~%"))
                 ;;; if the file sizes match, just do it 
                 ((= original-file-length new-file-length)
-                 (format t "Sizes of original and sorted files match,~%
-copying cleaned ~A file into ~A ... "
+                 (format t "Sizes of original and sorted files match... ~% copying cleaned ~A file into ~A ... "
                          inf (format nil "/tmp/~A.presort.~A" (file-namestring inf) (get-universal-time)))
                  (cl-fad:copy-file
                   inf
@@ -245,10 +244,9 @@ copying cleaned ~A file into ~A ... "
   "Entry point for passwd auditing tool."
   ;; (declare (ignorable argv))
   (make-context)
-  (format t "~& ~D ARGV :: ~{~A~^ ~}~%" (length argv) argv)
   (let ((possible-path (make-pathname :defaults (second argv))))
-    (format t "~&OPath: ~A~%~%" possible-path)
-    (if possible-path
+    (format t "~&Target: ~A~%~%" possible-path)
+    (if (uiop:file-exists-p possible-path)
         (clup:do-sort-pass :inf possible-path))))
 
 (defun disable-debugger ()
