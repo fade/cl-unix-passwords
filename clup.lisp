@@ -33,6 +33,23 @@
         kcl scl openmcl mcl abcl ecl)
   (error 'not-implemented :proc (list 'quit code)))
 
+(defun wc-l (file)
+  (let ((buffer-size 10000))
+    (with-open-file (stream file :element-type '(unsigned-byte 8))
+      (let ((buffer (make-array buffer-size :element-type '(unsigned-byte 8)))
+            (count 0))
+        (multiple-value-bind (i partial)
+            (floor (file-length stream) buffer-size)
+          (dotimes (j i)
+            (read-sequence buffer stream)
+            (incf count (count 10 buffer)))
+          (read-sequence buffer stream :end partial)
+          (incf count (count 10 buffer :end partial)))
+        count))))
+
+(defparameter *empty-lines* 0
+  "Hold the number of observed blank lines for the input file under
+  consideration.")
 
 
 ;; if we remove the empty subseqs here, we clean the file quite
@@ -95,29 +112,29 @@
   (with-open-file (s file)
     (file-length s)))
 
-(defun do-sort-group (&key (inf "/etc/group"))
-  "enter rat's nest of side effects... "
-  (if inf
-      (output-sorted-gfile :infile inf))
-  (let* ((ouf (format nil "/tmp/~A.sorted" (file-namestring inf)))
-         (original-file-length (f-length inf))
-         (new-file-length (f-length ouf)))
-    (if (or (= original-file-length new-file-length)
-            *empty-lines*)
-        (handler-case
-            (let* ((backup (format nil "/tmp/~A.presort.~A" (file-namestring inf) (get-universal-time))))
-              (format t "Sizes of original and sorted files match,~%
-copying sorted file into place. Backing up original ~A into ~A.. " inf backup)
-              (cl-fad:copy-file
-               inf
-               backup :overwrite t)
-              (format t "~&Replacing ~A with sorted output from ~A~%" inf ouf)
-              (cl-fad:copy-file ouf inf :overwrite t)
-              (format t "[Done]~%"))
-          (file-error (c)
-            (format t "~&~%A file error has occured. You likely don't have permission to write the ~A file.~%The error returned was:~%~A~%" inf c)))
+;; (defun do-sort-group (&key (inf "/etc/group"))
+;;   "enter rat's nest of side effects... "
+;;   (if inf
+;;       (output-sorted-gfile :infile inf))
+;;   (let* ((ouf (format nil "/tmp/~A.sorted" (file-namestring inf)))
+;;          (original-file-length (f-length inf))
+;;          (new-file-length (f-length ouf)))
+;;     (if (or (= original-file-length new-file-length)
+;;             *empty-lines*)
+;;         (handler-case
+;;             (let* ((backup (format nil "/tmp/~A.presort.~A" (file-namestring inf) (get-universal-time))))
+;;               (format t "Sizes of original and sorted files match,~%
+;; copying sorted file into place. Backing up original ~A into ~A.. " inf backup)
+;;               (cl-fad:copy-file
+;;                inf
+;;                backup :overwrite t)
+;;               (format t "~&Replacing ~A with sorted output from ~A~%" inf ouf)
+;;               (cl-fad:copy-file ouf inf :overwrite t)
+;;               (format t "[Done]~%"))
+;;           (file-error (c)
+;;             (format t "~&~%A file error has occured. You likely don't have permission to write the ~A file.~%The error returned was:~%~A~%" inf c)))
 
-        (format t "Sorted passwd file is not the same length as the original:~% ~D bytes vs. ~D bytes" new-file-length original-file-length))))
+;;         (format t "Sorted passwd file is not the same length as the original:~% ~D bytes vs. ~D bytes" new-file-length original-file-length))))
 
 
 (defun do-sort-pass (&key (inf "/etc/passwd"))
@@ -128,16 +145,33 @@ copying sorted file into place. Backing up original ~A into ~A.. " inf backup)
   (let* ((ouf (format nil "/tmp/~A.sorted" (file-namestring inf)))
          (original-file-length (f-length inf))
          (new-file-length (f-length ouf)))
-    (if (= original-file-length new-file-length)
+    (if (or (= original-file-length new-file-length)
+            *empty-lines*)
         (handler-case
             (progn
-              (format t "Sizes of original and sorted files match,~%
-copying ~a file into ~a ... " inf (format nil "/tmp/~A.presort.~A" (file-namestring inf) (get-universal-time)))
-              (cl-fad:copy-file
-               inf
-               (format nil "/tmp/~A.presort.~A" (file-namestring inf) (get-universal-time)) :overwrite t)
-              (cl-fad:copy-file ouf inf :overwrite t)
-              (format t "[Done]~%"))
+              (cond
+                ;;; if the file sizes don't match in length, but we have found empty lines:
+                ((and (/= original-file-length new-file-length) *empty-lines*)
+                 (format t "Sizes of original and sorted files do not match,~%
+The file contained blank lines. copying cleaned and sorted ~a file into ~a ... ~%"
+                         inf (format nil "/tmp/~A.presort.~A" (file-namestring inf) (get-universal-time)))
+                 (cl-fad:copy-file
+                  inf
+                  (format nil "/tmp/~A.presort.~A" (file-namestring inf) (get-universal-time)) :overwrite t)
+                 (cl-fad:copy-file ouf inf :overwrite t)
+                 (format t "[Done]~%"))
+                ;;; if the file sizes match, just do it 
+                ((= original-file-length new-file-length)
+                 (format t "Sizes of original and sorted files match,~%
+copying cleaned ~A file into ~A ... ~%"
+                         inf (format nil "/tmp/~A.presort.~A" (file-namestring inf) (get-universal-time)))
+                 (cl-fad:copy-file
+                  inf
+                  (format nil "/tmp/~A.presort.~A" (file-namestring inf) (get-universal-time)) :overwrite t)
+                 (cl-fad:copy-file ouf inf :overwrite t)
+                 (format t "[Done]~%"))
+                (t
+                 (error "This shouldn't happen, but we know from experience that sparrow likes whiskey."))))
           (file-error (c)
             (format t "~&~%A file error has occured. You likely don't have permission to write the ~A file.~%The error returned was:~%~A~%" inf c)))
 
