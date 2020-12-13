@@ -142,8 +142,9 @@
   (when inf
     (output-sorted-pwfile :infile inf))
   (assert (uiop:file-exists-p inf))
-  (let* ((ouf (format nil "/tmp/~A.sorted" (file-namestring inf)))
+  (let* ((ouf (format nil "/tmp/~A.sorted" (file-namestring inf))) ;; sorted output file
          (original-file-length (f-length inf))
+         (backup (format nil "/tmp/~A.presort.~A" (file-namestring inf) (get-universal-time))) ;; copy of the input file
          (new-file-length (f-length ouf)))
     (if (or (= original-file-length new-file-length)
             *empty-lines*)
@@ -152,21 +153,20 @@
               (cond
                 ;;; if the file sizes don't match in length, but we have found empty lines:
                 ((and (/= original-file-length new-file-length) *empty-lines*)
-                 (format t "Sizes of original and sorted files do not match,~%
-The file contained blank lines. copying cleaned and sorted ~a file into ~a ... "
-                         inf (format nil "/tmp/~A.presort.~A" (file-namestring inf) (get-universal-time)))
-                 (cl-fad:copy-file
-                  inf
-                  (format nil "/tmp/~A.presort.~A" (file-namestring inf) (get-universal-time)) :overwrite t)
+                 (format t "Sizes of original and sorted files do not match,~% but the file contained blank lines. Backing up original ~a file into ~a ... "
+                         inf backup)
+                 (cl-fad:copy-file inf backup :overwrite t)
+                 (format t "[Done]~%")
+                 (format t "Moving cleaned and sorted ~A file into its original place ... " inf)
                  (cl-fad:copy-file ouf inf :overwrite t)
                  (format t "[Done]~%"))
                 ;;; if the file sizes match, just do it 
                 ((= original-file-length new-file-length)
-                 (format t "Sizes of original and sorted files match... ~% copying cleaned ~A file into ~A ... "
-                         inf (format nil "/tmp/~A.presort.~A" (file-namestring inf) (get-universal-time)))
-                 (cl-fad:copy-file
-                  inf
-                  (format nil "/tmp/~A.presort.~A" (file-namestring inf) (get-universal-time)) :overwrite t)
+                 (format t "Sizes of original and sorted files match... ~% backing up original ~A file into ~A ... "
+                         inf backup)
+                 (cl-fad:copy-file inf backup :overwrite t)
+                 (format t "[Done]~%")
+                 (format t "Moving cleaned and sorted ~A file into its original place ... " inf)
                  (cl-fad:copy-file ouf inf :overwrite t)
                  (format t "[Done]~%"))
                 (t
