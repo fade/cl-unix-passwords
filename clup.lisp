@@ -112,31 +112,6 @@
   (with-open-file (s file)
     (file-length s)))
 
-;; (defun do-sort-group (&key (inf "/etc/group"))
-;;   "enter rat's nest of side effects... "
-;;   (if inf
-;;       (output-sorted-gfile :infile inf))
-;;   (let* ((ouf (format nil "/tmp/~A.sorted" (file-namestring inf)))
-;;          (original-file-length (f-length inf))
-;;          (new-file-length (f-length ouf)))
-;;     (if (or (= original-file-length new-file-length)
-;;             *empty-lines*)
-;;         (handler-case
-;;             (let* ((backup (format nil "/tmp/~A.presort.~A" (file-namestring inf) (get-universal-time))))
-;;               (format t "Sizes of original and sorted files match,~%
-;; copying sorted file into place. Backing up original ~A into ~A.. " inf backup)
-;;               (cl-fad:copy-file
-;;                inf
-;;                backup :overwrite t)
-;;               (format t "~&Replacing ~A with sorted output from ~A~%" inf ouf)
-;;               (cl-fad:copy-file ouf inf :overwrite t)
-;;               (format t "[Done]~%"))
-;;           (file-error (c)
-;;             (format t "~&~%A file error has occured. You likely don't have permission to write the ~A file.~%The error returned was:~%~A~%" inf c)))
-
-;;         (format t "Sorted passwd file is not the same length as the original:~% ~D bytes vs. ~D bytes" new-file-length original-file-length))))
-
-
 (defun do-sort-pass (&key (inf "/etc/passwd"))
   "enter rat's nest of side effects... "
   (when inf
