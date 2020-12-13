@@ -128,22 +128,22 @@
               (cond
                 ;;; if the file sizes don't match in length, but we have found empty lines:
                 ((and (/= original-file-length new-file-length) *empty-lines*)
-                 (format t "Sizes of original and sorted files do not match,~% but the file contained blank lines. Backing up original ~a file into ~a ... "
+                 (format t "Sizes of original and sorted files do not match, but the file contained blank lines.~% Backing up original ~a file into ~a ... "
                          inf backup)
                  (cl-fad:copy-file inf backup :overwrite t)
                  (format t "[Done]~%")
                  (format t "Moving cleaned and sorted ~A file into its original place ... " inf)
                  (cl-fad:copy-file ouf inf :overwrite t)
-                 (format t "[Done]~%"))
+                 (format t "[Done]~2%"))
                 ;;; if the file sizes match, just do it 
                 ((= original-file-length new-file-length)
                  (format t "Sizes of original and sorted files match... ~% backing up original ~A file into ~A ... "
                          inf backup)
                  (cl-fad:copy-file inf backup :overwrite t)
-                 (format t "[Done]~%")
+                 (format t "[Done]~2%")
                  (format t "Moving cleaned and sorted ~A file into its original place ... " inf)
                  (cl-fad:copy-file ouf inf :overwrite t)
-                 (format t "[Done]~%"))
+                 (format t "[Done]~2%"))
                 (t
                  (error "This shouldn't happen, but we know from experience that sparrow likes whiskey."))))
           (file-error (c)
